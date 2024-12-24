@@ -5,7 +5,9 @@ import os
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))  # take absolute location of the file
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'planets.db')
 
+db = SQLAlchemy(app)
 
 @app.route('/')  # decorator.special capability...define route for endpoint
 def hello_world():  # put application's code here
@@ -43,6 +45,26 @@ def url_variables(name: str, age: int):
         return jsonify(message="Sorry " + name + ", you are not old enough"), 401
     else:
         return jsonify(message="Welcome " + name + ", you are old enough"), 201
+
+
+# data base models
+
+class User (db.Model):  #This line defines a new class User that inherits from db.Model.
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String)
+    last_name = Column(String)
+    email = Column(String, unique=True)
+    password = Column(String)
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
